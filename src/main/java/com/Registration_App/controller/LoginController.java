@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.Registration_App.model.DAOService;
 import com.Registration_App.model.DAOServicesImpl;
@@ -26,21 +27,33 @@ public class LoginController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		
-		DAOService service = new DAOServicesImpl();
-		service.connectDB();
-		boolean status = service.verifyCredentials(email, password);
-		
-		if(status == true) {
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/newRegistration.jsp");
-			rd.forward(request, response);
-		} else {
-			request.setAttribute("error", "Invalid Username/ Password");
+		try {
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			
+			DAOService service = new DAOServicesImpl();
+			service.connectDB();
+			boolean status = service.verifyCredentials(email, password);
+			
+			if(status == true) {
+				
+				HttpSession session = request.getSession(true);
+				session.setAttribute("email", email);
+				session.setMaxInactiveInterval(10);
+				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/newRegistration.jsp");
+				rd.forward(request, response);
+				
+			} else {
+				request.setAttribute("error", "Invalid Username/ Password");
+				RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
+				rd.forward(request, response);
+			}
+		} catch (Exception e) {
 			RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
 			rd.forward(request, response);
 		}
+		
+		
 	}
 
 }

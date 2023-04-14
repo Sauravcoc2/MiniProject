@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ include file = "Menu.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,5 +18,9 @@
 		<input type = "submit" value = "save"/>
 	</pre>
 	</form>
+	<%
+			if(request.getAttribute("msg") != null)
+				out.println(request.getAttribute("msg"));
+		%>
 </body>
 </html>

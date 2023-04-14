@@ -40,6 +40,35 @@ public class DAOServicesImpl implements DAOService {
 		
 	}
 
+	@Override
+	public ResultSet getAllReg() {
+		try {
+			ResultSet result = stmnt.executeQuery("select * from Registration");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public void deleteByEmailId(String email) {
+		try {
+			stmnt.executeUpdate("Delete from Registration where email = '"+email+"'");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void updateReg(String email, String mobile) {
+		try {
+			stmnt.executeUpdate("update registration set mobile = '"+mobile+"' where email = '"+email+"'");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 
 }
